@@ -5,7 +5,7 @@
 #__author__= 'BaiduID-ihciah'
 #__author__= '13307130364@fudan.edu.cn'
 #__author__= 'http://www.ihcblog.com'
-VERSION='1.2'
+VERSION='1.3'
 #在保留版权的基础上可以修改、重新发布
 #但不允许用于商业用途或出售等
 

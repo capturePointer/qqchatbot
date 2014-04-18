@@ -812,10 +812,31 @@ class State(tornado.web.RequestHandler):
     opener=urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))
     opener.addheaders = [('User-Agent', ua)]
     urllib2.install_opener(opener)
-    ra=opener.open(posturl,strp).geturl()
+    ra=opener.open(posturl,strp)
+    u2=ra.read()
+    #self.write(u2)
+    if u2.find('家园</a> <a href="')!=-1:
+        u2=strc(u2,'家园</a> <a href="','">ＱＱ')
+        u2=opener.open(u2).read()
+        if u2.find('QQ密码:(<FORM action="')!=-1:
+            u3=strc(u2,'type="password"><br /><FORM action="','"')
+            (myqq,mypsw)=myconfig.accountinfo()
+            data=urllib.urlencode({'qq': myqq,'pwd':mypsw, 'bid_code': '3GQQ','toQQchat':'true','login_url':'http://pt.3g.qq.com/s?aid=nLoginnew&q_from=3GQQ','q_from':'','modifySKey':'0',
+                                   'loginType':'1','aid':'nLoginHandle','i_p_w':'qq|pwd|'})
+            u3=opener.open(u3,data).read()
+            #self.write(u3)
+            if u3.find('如果不能自动跳转请点击')!=-1:
+                u3=stac(u3,'如果不能自动跳转请点击<a href="','"')
+                u3=opener.open(u3).read()
+            self.write(u3)
+        
+    
+    
+    ra=ra.geturl()
     self.write(ra)
     uri=ra[ra.find('?'):]
-    self.write(opener.open('http://'+sae.const.APP_NAME+'.sinaapp.com/set'+uri).read())
+    self.write(opener.open('http://'+myconfig.myappid+'.sinaapp.com/set'+uri).read())
+
 
 class CheckState(tornado.web.RequestHandler):
   def get(self):
